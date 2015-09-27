@@ -18,6 +18,12 @@ class CreateQuestionsTable extends Migration {
             $table->text('question');
             $table->string('slug', 32)->unique();
             $table->text('answer');
+			$table->string('ask_person');
+			$table->string('answer_person');
+			$table->string('ask_address')->nullable();
+			$table->string('ask_phone')->nullable();
+			$table->string('ask_email')->nullable();
+			$table->string('image');
 			$table->timestamps();
 		});
 	}

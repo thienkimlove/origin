@@ -2,7 +2,6 @@
 
 use App\Http\Requests;
 use App\Http\Requests\VideoRequest;
-use App\Product;
 use App\Video;
 
 class VideosController extends BaseController {
@@ -31,8 +30,7 @@ class VideosController extends BaseController {
 	 */
 	public function create()
 	{
-		$products = Product::lists('title', 'id');
-		return view('admin.video.form', compact('products'));
+		return view('admin.video.form');
 	}
 
 	/**
@@ -45,7 +43,7 @@ class VideosController extends BaseController {
 	{
 		$data = $request->all();
 		$data['image'] = ($request->file('image') && $request->file('image')->isValid()) ? $this->saveImage($request->file('image')) : '';
-		$data['is_video'] = ($request->input('is_video') == 'on') ? true : false;
+		$data['hot'] = ($data['hot'] == 'on') ? true : false;
 		Video::create($data);
 		flash('Them moi media thanh cong!', 'success');
 		return redirect('admin/videos');
@@ -70,9 +68,8 @@ class VideosController extends BaseController {
 	 */
 	public function edit($id)
 	{
-		$products = Product::lists('title', 'id');
 		$video = Video::findOrFail($id);
-		return view('admin.video.form', compact('video', 'products'));
+		return view('admin.video.form', compact('video'));
 	}
 
 	/**
@@ -89,7 +86,7 @@ class VideosController extends BaseController {
 		if ($request->file('image') && $request->file('image')->isValid()) {
 			$data['image'] = $this->saveImage($request->file('image'), $video->image);
 		}
-		$data['is_video'] = ($request->input('is_video') == 'on') ? true : false;
+		$data['hot'] = ($data['hot'] == 'on') ? true : false;
 		$video->update($data);
 		flash('Sua media thành công!', 'success');
 		return redirect('admin/videos');

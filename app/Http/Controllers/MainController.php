@@ -8,9 +8,7 @@ use App\Http\Requests\ContactRequest;
 use App\Http\Requests\QuestionRequest;
 use App\Http\Requests\RegisterEmailRequest;
 use App\Post;
-use App\Product;
 use App\Question;
-use App\Setting;
 use App\Tag;
 use App\Video;
 use Illuminate\Http\Request;
@@ -18,30 +16,21 @@ use Illuminate\Support\Facades\Mail;
 
 class MainController extends Controller
 {
-
-    private function _prepareCategory($slug)
-    {
-        return  Category::where('slug', $slug)->first();
-    }
-
     public function index()
     {
         $page = 'index';
         return view('frontend.index', compact(
             'page'
         ))->with([
-            'meta_title' => (!empty($settings['meta_title'])) ? $settings['meta_title'] : 'Medical',
-            'meta_desc' => (!empty($settings['meta_desc'])) ? $settings['meta_desc'] : 'Medical',
-            'meta_keywords' => (!empty($settings['meta_keywords'])) ? $settings['meta_keywords'] : 'Medical',
+            'meta_title' => 'Trang chủ | '.env('META_TITLE'),
+            'meta_desc' =>  'Trang chủ '.env('META_TITLE'),
+            'meta_keywords' => env('META_KEYWORDS'),
         ]);
     }
 
 
     public function question($slug) {
-
         $page = 'hoi-dap-chuyen-gia';
-        $settings = Setting::lists('value', 'name');
-
         $question = Question::where('slug', $slug)->first();
         $related = Question::where('id', '<>', $question->id)->latest('updated_at')->limit(6)->get();
 
@@ -51,29 +40,20 @@ class MainController extends Controller
             'question',
             'related'
         ))->with([
-            'meta_title' => (!empty($settings['meta_title'])) ? $settings['meta_title'] : 'LycoEye.vn',
-            'meta_desc' => (!empty($settings['meta_desc'])) ? $settings['meta_desc'] : 'LycoEye.vn',
-            'meta_keywords' => (!empty($settings['meta_keywords'])) ? $settings['meta_keywords'] : 'LycoEye.vn',
+            'meta_title' => $question->question.' | '.env('META_TITLE'),
+            'meta_desc' =>  $question->question.' '.env('META_TITLE'),
+            'meta_keywords' => env('META_KEYWORDS'),
         ]);
 
     }
 
-    public function contact()
-    {
-        $page = 'contact';
-        return view('frontend.contact', compact('page'))->with([
-            'meta_title' => ' Liên hệ | Viemgan.com.vn ',
-            'meta_desc' => '',
-            'meta_keywords' => 'liên hệ',
-        ]);
-    }
 
     public function tag($keyword)
     {
         $tag = Tag::where('slug', $keyword)->first();
         $posts = $tag->posts();
         return view('frontend.search', compact('posts', 'keyword'))->with([
-            'meta_title' => ' Các bài viết với nhãn '.$keyword.' tại Viemgan.com.vn ',
+            'meta_title' => ' Các bài viết với nhãn '.$keyword.' tại '.env('META_TITLE'),
             'meta_desc' => '',
             'meta_keywords' => $keyword,
         ]);
@@ -96,26 +76,9 @@ class MainController extends Controller
         $videos = Video::latest('updated_at')->paginate(10);
 
         return view('frontend.video', compact('page', 'hotVideos', 'videos', 'videoMain'))->with([
-            'meta_title' => (!empty($settings['meta_title'])) ? $settings['meta_title'] : 'Video | Giảo Cổ Lam',
-            'meta_desc' => (!empty($settings['meta_desc'])) ? $settings['meta_desc'] : 'Video Giảo Cổ Lam',
-            'meta_keywords' => (!empty($settings['meta_keywords'])) ? $settings['meta_keywords'] : 'Video, Giảo Cổ Lam',
-        ]);
-    }
-
-    public function product($value = null)
-    {
-        $page = 'san-pham';
-        if (!$value) {
-            $product = Product::first();
-
-        } else {
-            $product = Product::where('slug', $value)->first();
-        }
-        $products = Product::all();
-        return view('frontend.san-pham', compact('page', 'products', 'product'))->with([
-            'meta_title' => (!empty($settings['meta_title'])) ? $settings['meta_title'] : 'Sản phẩm | Giảo Cổ Lam',
-            'meta_desc' => (!empty($settings['meta_desc'])) ? $settings['meta_desc'] : 'Sản phẩm Giảo Cổ Lam',
-            'meta_keywords' => (!empty($settings['meta_keywords'])) ? $settings['meta_keywords'] : 'Sản phẩm, Giảo Cổ Lam',
+            'meta_title' => 'Video | '.env('META_TITLE'),
+            'meta_desc' =>  'Video '.env('META_TITLE'),
+            'meta_keywords' => env('META_KEYWORDS'),
         ]);
     }
 
@@ -124,9 +87,9 @@ class MainController extends Controller
         $page = 'phan-phoi';
         $category = Category::where('slug', 'phan-phoi')->first();
         return view('frontend.phan-phoi', compact('page', 'category'))->with([
-            'meta_title' => (!empty($settings['meta_title'])) ? $settings['meta_title'] : 'Hệ thống phân phối | Giảo Cổ Lam',
-            'meta_desc' => (!empty($settings['meta_desc'])) ? $settings['meta_desc'] : 'Hệ thống phân phối Giảo Cổ Lam',
-            'meta_keywords' => (!empty($settings['meta_keywords'])) ? $settings['meta_keywords'] : 'Hệ thống phân phối, Giảo Cổ Lam',
+            'meta_title' => 'Phân phối | '.env('META_TITLE'),
+            'meta_desc' =>  'Phân phối '.env('META_TITLE'),
+            'meta_keywords' => env('META_KEYWORDS'),
         ]);
     }
 
@@ -134,9 +97,9 @@ class MainController extends Controller
     {
         $page = 'lien-he';
         return view('frontend.lien-he', compact('page'))->with([
-            'meta_title' => (!empty($settings['meta_title'])) ? $settings['meta_title'] : 'Liên hệ | Giảo Cổ Lam',
-            'meta_desc' => (!empty($settings['meta_desc'])) ? $settings['meta_desc'] : 'Liên hệ Giảo Cổ Lam',
-            'meta_keywords' => (!empty($settings['meta_keywords'])) ? $settings['meta_keywords'] : 'Liên hệ, Giảo Cổ Lam',
+            'meta_title' => 'Liên hệ | '.env('META_TITLE'),
+            'meta_desc' =>  'Liên hệ '.env('META_TITLE'),
+            'meta_keywords' => env('META_KEYWORDS'),
         ]);
     }
 
@@ -147,7 +110,7 @@ class MainController extends Controller
             ->where('status', true)
             ->paginate(10);
         return view('frontend.search', compact('posts', 'keyword'))->with([
-            'meta_title' => ' Các bài viết với nhãn '.$keyword.' tại Giảo Cổ Lam',
+            'meta_title' => ' Các bài viết với nhãn '.$keyword.' tại '.env('META_TITLE'),
             'meta_desc' => '',
             'meta_keywords' => $keyword,
         ]);

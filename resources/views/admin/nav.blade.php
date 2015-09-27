@@ -7,7 +7,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand">Viemgan Admin v2.0</a>
+        <a class="navbar-brand">Admin v2.0</a>
     </div>
     <!-- /.navbar-header -->
 
@@ -59,20 +59,6 @@
                         </li>
                         <li>
                             <a href="{{url('admin/videos/create')}}">Thêm video</a>
-                        </li>
-                    </ul>
-                    <!-- /.nav-second-level -->
-                </li>
-
-                <li>
-                    <a><i class="fa fa-files-o fa-fw"></i>Sản phẩm <span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
-
-                        <li>
-                            <a href="{{url('admin/products')}}">Danh sách</a>
-                        </li>
-                        <li>
-                            <a href="{{url('admin/products/create')}}">Thêm Sản phẩm</a>
                         </li>
                     </ul>
                     <!-- /.nav-second-level -->

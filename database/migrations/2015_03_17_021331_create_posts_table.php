@@ -19,16 +19,15 @@ class CreatePostsTable extends Migration {
             $table->string('title');
             $table->string('slug', 32)->unique();
             $table->text('desc');
+			$table->string('city');
             $table->text('content');
             $table->string('image');
-            $table->boolean('homepage_slide')->default(false);
-            $table->boolean('homepage_intro')->default(false);
-            $table->boolean('homepage_discovery')->default(false);
-            $table->boolean('hot')->default(false);
-            $table->boolean('reason')->default(false);
             $table->integer('views')->default(0);
             $table->boolean('status')->default(true);
 			$table->timestamps();
+
+			$table->integer('category_id')->unsigned();
+			$table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
 		});
 	}
 
